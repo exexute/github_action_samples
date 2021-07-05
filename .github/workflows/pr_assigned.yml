@@ -1,0 +1,46 @@
+name: pr_assigned
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [assigned]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Set up Python 3.7
+        uses: actions/checkout@v1
+        with:
+          python-version: 3.7
+          
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: success
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "状态：项目${{github.repository}}构建成功\n分支：${{github.ref}}\n流程：${{github.workflow}}\n构建编号：${{github.run_number}}\n触发事件：${{github.event_name}}\n提交人：${{github.actor}}\nSHA-1：${{github.sha}}\n","tag": "lark_md"}}]}}'
+
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: failure
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "状态：项目${{github.repository}}构建成功\n分支：${{github.ref}}\n流程：${{github.workflow}}\n构建编号：${{github.run_number}}\n触发事件：${{github.event_name}}\n提交人：${{github.actor}}\nSHA-1：${{github.sha}}\n","tag": "lark_md"}}]}}'
