@@ -24,11 +24,12 @@ jobs:
           echo "- in ${{ github.event.pull_request.merged_by.login }}!"
   
   Build-And-Deploy-For-TEST:
-    if: github.event_name == 'pull_request' && (github.event.action == 'opened' || (github.event.action == 'closed' && github.event.pull_request.merged == false))
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Dump GitHub context
+        if: github.event.action == 'opened' || (github.event.action == 'closed' && github.event.pull_request.merged == false)
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
