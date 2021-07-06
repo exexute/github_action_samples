@@ -40,3 +40,4 @@ jobs:
           echo "- in ${{ github.event_name }}!"
           echo "- in ${{ github.event.pull_request.title }}!"
           echo "- in ${{ github.event.pull_request.merged_by.login }}!"
+
