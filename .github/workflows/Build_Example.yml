@@ -3,7 +3,6 @@ name: Build Example For PR Merge
 on:
   pull_request:
     branches: [ main ]
-    types: [closed]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,3 +22,22 @@ jobs:
           echo "- in ${{ github.event_name }}!"
           echo "- in ${{ github.event.pull_request.title }}!"
           echo "- in ${{ github.event.pull_request.merged_by.login }}!"
+  
+  Build-And-Deploy-For-TEST:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Dump GitHub context
+        if: github.event.action == 'opened' || (github.event.action == 'closed' && github.event.pull_request.merged == false)
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump Merge Messagge
+        run: |
+          echo "Hello ${{ github.event.label.name }}!"
+          echo "- in ${{ github.event_name }}!"
+          echo "- in ${{ github.event.pull_request.title }}!"
+          echo "- in ${{ github.event.pull_request.merged_by.login }}!"
+
