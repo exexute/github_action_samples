@@ -7,7 +7,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy_to_prod_trigger:
+  Build And Deploy For PROD:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -21,6 +21,5 @@ jobs:
         run: |
           echo "Hello ${{ github.event.label.name }}!"
           echo "- in ${{ github.event_name }}!"
-          echo "- in ${{ github.event_name }}!"
-          echo "- in ${{ github.event_name }}!"
-          echo "- in ${{ github.event_name }}!"
+          echo "- in ${{ github.event.pull_request.title }}!"
+          echo "- in ${{ github.event.pull_request.merged_by.login }}!"
