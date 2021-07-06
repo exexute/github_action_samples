@@ -2,7 +2,7 @@ name: pull_request_labeled_bug
 
 on:
   pull_request:
-    types: [labeled]
+    types: [labeled, clonsed]
     branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -28,4 +28,28 @@ jobs:
       - run: |
           echo "Hello ${{ github.event.label.name }}!"
           echo "- in ${{ github.event.name }}!"
+          
+  deploy_to_prod:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump Merge Messagge
+        run: |
+          echo "Hello ${{ github.event.label.name }}!"
+          echo "- in ${{ github.event_name }}!"
+          echo "- in ${{ github.event_name }}!"
+          echo "- in ${{ github.event_name }}!"
+          echo "- in ${{ github.event_name }}!"
+          
           
