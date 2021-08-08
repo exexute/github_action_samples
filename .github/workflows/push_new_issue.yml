@@ -1,7 +1,7 @@
 name: Greetings
 
-on: [pull_request, issues]
-  types: []
+on: issues
+  type:
 
 jobs:
   greeting:
