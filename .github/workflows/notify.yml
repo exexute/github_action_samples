@@ -76,6 +76,7 @@ jobs:
       - name: official notify
         env:
           LABELS: ${{ toJson(github.event.issue.labels) }}
+        run: echo "${{ env.LABELS }}"
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.WEBHOOK_URL }}
