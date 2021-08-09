@@ -60,7 +60,7 @@ jobs:
   issue_commented:
     # This job only runs for issue comments
     name: Issue comment
-    if: ${{ !github.event.issue.pull_request && (github.event_name == "issue_comment") }}
+    if: !github.event.issue.pull_request && (github.event_name == "issue_comment")
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
