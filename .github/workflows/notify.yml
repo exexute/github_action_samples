@@ -4,7 +4,7 @@ name: Notify
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   issues:
-    types: [opened]
+    types: [opened, edited, deleted, closed]
   issue_comment:
   gollum:
   discussion:
@@ -12,57 +12,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-  issue_commented:
-    # This job only runs for issue comments
-    name: Issue comment
-    if: ${{ github.event_name == 'issue_comment' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: discussion comment notify
-        if: ${{ !github.event.issue.pull_request }}
-        uses: joelwmale/webhook-action@master
-        with:
-          url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} comment ${{ github.event.comment.id }} ${{ github.event.action }}"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository name**: ${{ github.event.repository.name }}\n**issue title**: ${{ github.event.issue.title }}\n**comment body**: ${{ github.event.comment.body }}\n**issue comment link:** [open issue comment](${{ github.event.comment.html_url }})\n**issue state**: ${{ github.event.issue.state }}\n**assignee:** ${{ github.event.issue.assignee }} \n**assignees:** ${{ github.event.issue.assignees }} \n**issue labels**: ${{ github.event.issue.labels }}\n**issue comment author:** ${{github.actor}}\n**created at:** ${{ github.event.issue.created_at }}\n**updated at:** ${{ github.event.issue.updated_at }}","tag": "lark_md"}}]}}'
-
-      - name: start-build
-        if: ${{ github.event.issue.pull_request }}
-        uses: joelwmale/webhook-action@master
-        with:
-          url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "PR Comment\r\n触发事件：${{github.event_name}}\r\n提交人：${{github.actor}}","tag": "lark_md"}}]}}'
-
-  issue_action:
+  issues:
     name: Issue Created
     if: ${{ github.event_name == 'issues' }}
     runs-on: ubuntu-latest
@@ -80,6 +30,30 @@ jobs:
           url: ${{ secrets.WEBHOOK_URL }}
           body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.name }}\r\n**issue title**: ${{ github.event.issue.title }}\r\n**issue body**: ${{ github.event.issue.body }}\r\n**issue link:** [open issue link](${{ github.event.issue.html_url }})\r\n**issue state**: ${{ github.event.issue.state }}\r\n**assignee:** ${{ github.event.issue.assignee }} \r\n**assignees:** ${{ github.event.issue.assignees }} \r\n**issue labels**: ${{ github.event.issue.labels }}\r\n**issue author:** ${{github.actor}} \r\n**created at:** ${{ github.event.issue.created_at }}\r\n**updated at:** ${{ github.event.issue.updated_at }}\r\n","tag": "lark_md"}}]}}'
 
+  issue_commented:
+    name: Issue comment
+    if: ${{ github.event_name == 'issue_comment' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: discussion comment notify
+        if: ${{ !github.event.issue.pull_request }}
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} comment ${{ github.event.comment.number }} ${{ github.event.action }}"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository name**: ${{ github.event.repository.name }}\n**issue title**: ${{ github.event.issue.title }}\n**comment body**: ${{ github.event.comment.body }}\n**issue comment link:** [open issue comment](${{ github.event.comment.html_url }})\n**issue state**: ${{ github.event.issue.state }}\n**assignee:** ${{ github.event.issue.assignee }} \n**assignees:** ${{ github.event.issue.assignees }} \n**issue labels**: ${{ github.event.issue.labels }}\n**issue comment author:** ${{github.actor}}\n**created at:** ${{ github.event.issue.created_at }}\n**updated at:** ${{ github.event.issue.updated_at }}","tag": "lark_md"}}]}}'
+
+      - name: start-build
+        if: ${{ github.event.issue.pull_request }}
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "PR Comment\r\n触发事件：${{github.event_name}}\r\n提交人：${{github.actor}}","tag": "lark_md"}}]}}'
+
   discussion:
     name: Discussion Created
     if: ${{ github.event_name == 'discussion' }}
@@ -92,3 +66,21 @@ jobs:
         with:
           url: ${{ secrets.WEBHOOK_URL }}
           body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: Discussion ${{ github.event.discussion.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.full_name }}\r\n**title**: ${{ github.event.discussion.title }}\r\n**body**: ${{ github.event.discussion.body }}\r\n**category:** ${{ github.event.discussion.category.name }}\r\n**state**: ${{ github.event.discussion.state }}\r\n**author:** ${{github.actor}}\r\n**created at:** ${{ github.event.discussion.created_at }}\r\n**updated at:** ${{ github.event.discussion.updated_at }}\r\n","tag": "lark_md"}}]}}'
+
+  discussion_commented:
+    name: discussion commented notify
+    if: ${{ github.event_name == 'discussion_comment' }}
+    runs-on: ubuntu-latest
+    steps:
+        - name: Dump GitHub context
+          env:
+            GITHUB_CONTEXT: ${{ toJson(github) }}
+          run: echo "$GITHUB_CONTEXT"
+
+        - name: notify
+          env:
+            LABELS: ${{ toJson(github.event.issue.labels) }}
+          uses: joelwmale/webhook-action@master
+          with:
+            url: ${{ secrets.WEBHOOK_URL }}
+            body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: Discussion ${{ github.event.discussion.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.full_name }}\r\n**title**: ${{ github.event.discussion.title }}\r\n**body**: ${{ github.event.discussion.body }}\r\n**category:** ${{ github.event.discussion.category.name }}\r\n**state**: ${{ github.event.discussion.state }}\r\n**author:** ${{github.actor}}\r\n**created at:** ${{ github.event.discussion.created_at }}\r\n**updated at:** ${{ github.event.discussion.updated_at }}\r\n","tag": "lark_md"}}]}}'
