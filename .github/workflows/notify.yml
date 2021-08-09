@@ -4,10 +4,11 @@ name: Notify
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   issues:
-    types: [opened, edited, deleted, closed, labeled, milestoned]
+    types: [opened]
   issue_comment:
   gollum:
   discussion:
+    types: [opened]
   discussion_comment:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -60,7 +61,7 @@ jobs:
   issue_commented:
     # This job only runs for issue comments
     name: Issue comment
-    if: ${{ !github.event.issue.pull_request }} && ${{ github.event_name == 'issue_comment'}}
+    if: (${{ !github.event.issue.pull_request }} && ${{ github.event_name == 'issue_comment'}})
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
@@ -90,6 +91,24 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       - name: official notify
+        env:
+          LABELS: ${{ toJson(github.event.issue.labels) }}
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.name }}\n**issue title**: ${{ github.event.issue.title }}\n**issue body**: ${{ github.event.issue.body }}\n- **issue link:** [open issue link](${{ github.event.issue.html_url }})\n- **issue state**: ${{ github.event.issue.state }}\n- **assignee:** ${{ github.event.issue.assignee }} \n- **assignees:** ${{ github.event.issue.assignees }} \n- **issue labels**: ${{ github.event.issue.labels }}\n- **issue author:** ${{github.actor}} \n- **created at:** ${{ github.event.issue.created_at }}\n- **updated at:** ${{ github.event.issue.updated_at }}\n","tag": "lark_md"}}]}}'
+
+  discussion:
+    name: Discussion Created
+    if: ${{ github.event_name == 'discussion' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump Github Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${{ toJson(github) }}"
+
+      - name: notify
         env:
           LABELS: ${{ toJson(github.event.issue.labels) }}
         uses: joelwmale/webhook-action@master
