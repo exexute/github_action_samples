@@ -21,6 +21,11 @@ jobs:
           stale-issue-label: 'no-issue-activity'
           stale-pr-label: 'no-pr-activity'
 
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: notify
         env:
           LABELS: ${{ toJson(github.event.issue.labels) }}
