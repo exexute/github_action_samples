@@ -81,3 +81,12 @@ jobs:
         with:
           url: ${{ secrets.WEBHOOK_URL }}
           body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**notify:** issue ${{ github.event.issue.number }} comment ${{ github.event.comment.id }} ${{ github.event.action }}\n- **repository name**: {{ $GITHUB_REPOSITORY }}\n- **issue title**: ${{ github.event.issue.title }}\n- **issue state**: ${{ github.event.issue.state }}\n- **issue labels**: ${{ env.LABELS }}\n- **comment body**: ${{ github.event.comment.body }}\n- issue link: [open issue comment](${{ github.event.comment.html_url }})\n- issue comment author：${{github.actor}}","tag": "lark_md"}}]}}'
+
+  issue_action:
+    name: Issue Created
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
