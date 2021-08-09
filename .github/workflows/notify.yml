@@ -102,15 +102,10 @@ jobs:
     if: ${{ github.event_name == 'discussion' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Dump Github Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "${{ toJson(github) }}"
-
       - name: notify
         env:
           LABELS: ${{ toJson(github.event.issue.labels) }}
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.name }}\r\n**issue title**: ${{ github.event.issue.title }}\r\n**issue body**: ${{ github.event.issue.body }}\r\n**issue link:** [open issue link](${{ github.event.issue.html_url }})\r\n**issue state**: ${{ github.event.issue.state }}\r\n**assignee:** ${{ github.event.issue.assignee }} \r\n**assignees:** ${{ github.event.issue.assignees }} \r\n**issue labels**: ${{ github.event.issue.labels }}\r\n**issue author:** ${{github.actor}} \r\n**created at:** ${{ github.event.issue.created_at }}\r\n**updated at:** ${{ github.event.issue.updated_at }}\r\n","tag": "lark_md"}}]}}'
+          body: '{"msg_type":"interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: Discussion ${{ github.event.discussion.number }} ${{ github.event.action }}"}},"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository**: ${{ github.event.repository.full_name }}\r\n**title**: ${{ github.event.discussion.title }}\r\n**body**: ${{ github.event.discussion.body }}\r\n**category:** ${{ github.event.discussion.category.name }}\r\n**state**: ${{ github.event.discussion.state }}\r\n**author:** ${{github.actor}}\r\n**created at:** ${{ github.event.discussion.created_at }}\r\n**updated at:** ${{ github.event.discussion.updated_at }}\r\n","tag": "lark_md"}}]}}'
