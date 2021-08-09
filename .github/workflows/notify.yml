@@ -81,9 +81,18 @@ jobs:
 
   issue_action:
     name: Issue Created
+    if: ${{ github.event_name == 'issues' }}
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      - name: official notify
+        env:
+          LABELS: ${{ toJson(github.event.issue.labels) }}
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          body: '{"msg_type": "interactive","card": {"config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**notify:** issue ${{ github.event.issue.number }} ${{ github.event.action }}\n- **repository name**: {{ $GITHUB_REPOSITORY }}\n- **issue title**: ${{ github.event.issue.title }}\n- **issue state**: ${{ github.event.issue.state }}\n- **issue labels**: ${{ github.event.issue.labels }}\n- **comment body**: ${{ github.event.issue.body }}\n- issue link: [open issue comment](${{ github.event.issue.html_url }})\n- issue author：${{github.actor}}\n- **created at**: ${{ github.event.issue.created_at }}\n- **updated at**: ${{ github.event.issue.updated_at }}\n","tag": "lark_md"}}]}}'
