@@ -60,7 +60,7 @@ jobs:
   issue_commented:
     # This job only runs for issue comments
     name: Issue comment
-    if: ${{ !github.event.issue.pull_request }}
+    if: ${{ !github.event.issue.pull_request && github.event_name == "issue_comment" }}
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
@@ -77,7 +77,7 @@ jobs:
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} comment ${{ github.event.comment.id }} ${{ github.event.action }}"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "- **repository name**: ${{ github.event.repository.name }}\n- **issue title**: ${{ github.event.issue.title }}\n- **comment body**: ${{ github.event.comment.body }}\n- issue comment link: [open issue comment](${{ github.event.comment.html_url }})\n- **issue state**: ${{ github.event.issue.state }}\n- **assignee:** ${{ github.event.issue.assignee }} \n- **assignees:** ${{ github.event.issue.assignees }} \n- **issue labels**: ${{ github.event.issue.labels }}\n- **issue comment author:** ${{github.actor}}- **created at:** ${{ github.event.issue.created_at }}\n- **updated at:** ${{ github.event.issue.updated_at }}","tag": "lark_md"}}]}}'
+          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "NOTIFY: issue ${{ github.event.issue.number }} comment ${{ github.event.comment.id }} ${{ github.event.action }}"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "- **repository name**: ${{ github.event.repository.name }}\n- **issue title**: ${{ github.event.issue.title }}\n- **comment body**: ${{ github.event.comment.body }}\n- **issue comment link:** [open issue comment](${{ github.event.comment.html_url }})\n- **issue state**: ${{ github.event.issue.state }}\n- **assignee:** ${{ github.event.issue.assignee }} \n- **assignees:** ${{ github.event.issue.assignees }} \n- **issue labels**: ${{ github.event.issue.labels }}\n- **issue comment author:** ${{github.actor}}\n- **created at:** ${{ github.event.issue.created_at }}\n- **updated at:** ${{ github.event.issue.updated_at }}","tag": "lark_md"}}]}}'
 
   issue_action:
     name: Issue Created
