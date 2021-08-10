@@ -41,3 +41,4 @@ jobs:
           echo "::set-output name=version::$STARS"
         shell: bash
       - run: echo "🐧 This job is now running on release ${{ steps.release.outputs.version }}!"
+      - run: echo "release branch is ${GITHUB_REF##*/}"
