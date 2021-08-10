@@ -31,14 +31,9 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - id: release
         run: |
-          VERSION=`echo "release-1.0.0"|awk -F'-' '{print $2}'`
-          echo "::set-output name=version::$STARS"
+          VERSION=`echo ${GITHUB_REF##*/} | awk -F'-' '{print $2}'`
+          echo "::set-output name=version::$VERSION"
         shell: bash
       - run: echo "🐧 This job is now running on release ${{ steps.release.outputs.version }}!"
-      - run: echo "release branch is ${GITHUB_REF##*/}"
