@@ -1,6 +1,7 @@
 name: repository notify
 
 on:
+  push:
   schedule:
     - cron: '*/5 * * * *'
 
