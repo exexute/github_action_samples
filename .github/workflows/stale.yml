@@ -2,7 +2,7 @@ name: repository notify
 
 on:
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '*/5 * * * *'
 
 jobs:
   stale:
