@@ -49,5 +49,5 @@ jobs:
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "Repository Popularity Statistice Notify"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "div","text": {"content": "**repository: **${{ github.repository }}\n![flow](https://starchart.cc/HXSecurity/DongTai.svg)\n**star: ** ${{ steps.repo-stars.outputs.stars }}\n**fork: **${{ steps.repo-forks.outputs.forks }}\n**issue count: **${{ steps.repo-issues.outputs.issues }}\n","tag": "lark_md"}}]}}'
+          body: '{"msg_type": "interactive","card": {"header": {"title": {"tag": "plain_text", "content": "Repository Popularity Statistice Notify"}}, "config": {"wide_screen_mode": true,"enable_forward": true},"elements": [{"tag": "img","title": "DongTai Trending","href": "https://starchart.cc/HXSecurity/DongTai.svg"},{"tag": "div","text": {"content": "**repository: **${{ github.repository }}\n![flow](https://starchart.cc/HXSecurity/DongTai.svg)\n**star: ** ${{ steps.repo-stars.outputs.stars }}\n**fork: **${{ steps.repo-forks.outputs.forks }}\n**issue count: **${{ steps.repo-issues.outputs.issues }}\n","tag": "lark_md"}}]}}'
 
