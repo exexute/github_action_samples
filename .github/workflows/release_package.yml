@@ -37,6 +37,7 @@ jobs:
       - name: read tag id
         id: release
         run: |
+          echo ${github.event.release.tag_name}
           ID=`echo ${github.event.release.tag_name##v}`
           echo "::set-output id=id::$ID"
 
