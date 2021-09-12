@@ -53,4 +53,4 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/action-sample:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/action-sample:${{ github.event.tag_name }}
+            docker.pkg.github.com/${{ github.repository }}/action-sample:${{ steps.release.output.id }}
