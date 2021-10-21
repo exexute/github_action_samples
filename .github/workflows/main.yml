@@ -3,7 +3,6 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
     services:
       mysql:
         image: dongtai/dongtai-mysql:latest
@@ -53,16 +52,7 @@ jobs:
           VERSION=`echo ${GITHUB_REF##*/} | awk -F'-' '{print $2}'`
           echo "::set-output name=version::$VERSION"
         shell: bash
-      - name: Connect to Redis
-        run: node client.js
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
-      - name: Connect to MySql
-        run: node client.js
-        env:
-          MYSQL_HOST: mysql
-          MYSQL_PORT: 3306
+      - run: ping redis
       - run: ifconfig
       - run: netstat -antp
       - run: telnet localhost 6379
