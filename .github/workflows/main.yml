@@ -53,6 +53,18 @@ jobs:
           VERSION=`echo ${GITHUB_REF##*/} | awk -F'-' '{print $2}'`
           echo "::set-output name=version::$VERSION"
         shell: bash
+      - name: Connect to MySql
+        run: cat client.js
+      - name: Connect to Redis
+        run: node client.js
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+      - name: Connect to MySql
+        run: node client.js
+        env:
+          MYSQL_HOST: mysql
+          MYSQL_PORT: 3306
       - run: ifconfig
       - run: netstat -antp
       - run: telnet localhost 6379
