@@ -54,4 +54,5 @@ jobs:
         shell: bash
       - run: ifconfig
       - run: netstat -antp
+      - run: sleep 300
       - run: mysql -uroot -p"dongtai-iast" -e "show databases"
