@@ -42,4 +42,6 @@ jobs:
           VERSION=`echo ${GITHUB_REF##*/} | awk -F'-' '{print $2}'`
           echo "::set-output name=version::$VERSION"
         shell: bash
+      - run: ifconfig
+      - run: netstat -antp
       - run: mysql -uroot -h127.0.0.1 -p'dongtai-iast' -e 'SELECT version()'
