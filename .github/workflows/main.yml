@@ -9,6 +9,10 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd "mysqladmin ping --silent" --health-interval 10s --health-timeout 180s --health-retries 10
+      redis:
+        image: dongtai/dongtai-redis:latest
+        ports:
+          - 6379:6379
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action }} event."
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action_path }} event."
@@ -44,5 +48,6 @@ jobs:
         shell: bash
       - run: ifconfig
       - run: netstat -antp
+      - run: telnet localhost 6379
       - run: telnet localhost 3306
       - run: mysql -uroot -p'dongtai-iast' -e 'SELECT version()'
