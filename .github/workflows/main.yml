@@ -3,6 +3,12 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: dongtai/dongtai-mysql:latest
+        ports:
+          - 3306:3306
+        options: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action }} event."
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action_path }} event."
