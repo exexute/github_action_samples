@@ -37,3 +37,6 @@ jobs:
           echo "::set-output name=version::$VERSION"
         shell: bash
       - run: echo "🐧 This job is now running on release ${{ steps.release.outputs.version }}!"
+      - uses: addnab/docker-run-action@v3
+        with:
+        image: dongtai/dongtai-mysql:latest
