@@ -54,4 +54,4 @@ jobs:
         shell: bash
       - run: ifconfig
       - run: netstat -antp
-      - run: mysql -uroot -P3307 -p'dongtai-iast' -e 'show databases'
+      - run: mysql -uroot -p"dongtai-iast" -e "show databases"
