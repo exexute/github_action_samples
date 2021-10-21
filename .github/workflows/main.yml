@@ -3,6 +3,7 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
     services:
       mysql:
         image: dongtai/dongtai-mysql:latest
