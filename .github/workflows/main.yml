@@ -7,7 +7,7 @@ jobs:
       mysql:
         image: dongtai/dongtai-mysql:latest
         ports:
-          - 3306:3306
+          - 3307:3307
         options: >-
           --health-cmd "mysqladmin ping --silent" 
           --health-interval 10s 
@@ -54,4 +54,4 @@ jobs:
         shell: bash
       - run: ifconfig
       - run: netstat -antp
-      - run: mysql -uroot -p'dongtai-iast' -e 'show databases'
+      - run: mysql -uroot -P3307 -p'dongtai-iast' -e 'show databases'
