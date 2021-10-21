@@ -8,7 +8,7 @@ jobs:
         image: dongtai/dongtai-mysql:latest
         ports:
           - 3306:3306
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 10s --health-retries 10
+        options: --health-cmd "mysqladmin ping --silent" --health-interval 10s --health-timeout 180s --health-retries 10
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action }} event."
       - run: echo "🎉 The job was automatically triggered by a ${{ github.action_path }} event."
@@ -42,8 +42,3 @@ jobs:
           VERSION=`echo ${GITHUB_REF##*/} | awk -F'-' '{print $2}'`
           echo "::set-output name=version::$VERSION"
         shell: bash
-      - run: echo "🐧 This job is now running on release ${{ steps.release.outputs.version }}!"
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: dongtai/dongtai-mysql:latest
-          run: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
