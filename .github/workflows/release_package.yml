@@ -46,6 +46,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pwd
+          git config --global user.name 'exexute'
+          git config --global user.email '1528360120@qq.com'
           git checkout -b "release-${{ steps.release.outputs.id }}"
           bash .github/script/replace_version.sh ${{ steps.release.outputs.id }}
           git push origin "release-${{ steps.release.outputs.id }}"
