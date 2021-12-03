@@ -1,0 +1,5 @@
+#!/bin/bash
+SOURCE_VERSION=:latest
+TARGET_VERSION=:$1
+
+sed  -i "s/$SOURCE_VERSION/$TARGET_VERSION/g" README.md
