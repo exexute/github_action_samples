@@ -46,7 +46,7 @@ jobs:
           pwd
           git checkout -b "release-${{ steps.release.outputs.id }}"
           bash .github/script/replace_version.sh ${{ steps.release.outputs.id }}
-          git push
+          git push origin "release-${{ steps.release.outputs.id }}"
 
 #       - name: Log in to GitHub Docker Registry
 #         uses: docker/login-action@v1
