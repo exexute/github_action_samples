@@ -42,6 +42,8 @@ jobs:
           echo "::set-output name=id::$ID"
       
       - name: create release branch
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pwd
           git checkout -b "release-${{ steps.release.outputs.id }}"
