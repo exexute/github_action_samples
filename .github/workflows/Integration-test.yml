@@ -1,0 +1,17 @@
+name: Integration Tests
+
+on: 
+  release:
+    types: [published]
+
+jobs:
+  repository-dispatch-event:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Repository Dispatch    
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: exexute/github_action_samples
+          event-type: release-dongtai
+          client-payload: '{"username": "${{ github.actor }}", "release": ${{ toJSON(github.event.release) }}}'

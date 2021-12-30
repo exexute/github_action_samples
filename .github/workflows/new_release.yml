@@ -1,0 +1,15 @@
+name: Repository Dispatch
+on:
+  repository_dispatch:
+    types: [release-dongtai]
+jobs:
+  myEvent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "Print all environment variables"
+      - run: env
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+
+      - run: echo ${{ github.event.client_payload.sha }}
