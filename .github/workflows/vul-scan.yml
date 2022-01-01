@@ -168,13 +168,14 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: exexute/hello-world-docker-action@main
+      - use: exexute/hello-world-docker-action
         with:
           who-to-greet: "owefsad"
 
   Run-Success:
     if: success()
     runs-on: ubuntu-latest
+    needs: [ Run-Custom-Action ]
     steps:
       - name: send notify
         run: echo "ci pipeline finished."
@@ -182,6 +183,7 @@ jobs:
   Run-Failure:
     if: failure()
     runs-on: ubuntu-latest
+    needs: [ Run-Custom-Action ]
     steps:
       - name: send notify
         run: echo "ci pipeline failure."
