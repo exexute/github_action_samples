@@ -162,3 +162,26 @@ jobs:
       - run: |
           ossutil cp -rf release/iast-agent.jar oss://dongtai/agent_test/java/iast-agent.jar --meta x-oss-object-acl:public-read
           ossutil cp -rf release/lib/ oss://dongtai/agent_test/java/ --meta x-oss-object-acl:public-read
+
+  Run-Custom-Action:
+    name: run custom action
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - use: exexute/hello-world-docker-action
+        with:
+          who-to-greet: "owefsad"
+
+  Run-Success:
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: send notify
+        run: echo "ci pipeline finished."
+
+  Run-Failure:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: send notify
+        run: echo "ci pipeline failure."
