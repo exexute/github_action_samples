@@ -174,7 +174,7 @@ jobs:
           who-to-greet: "owefsad"
       
       - name: show welcome timestamp
-        run: echo "${{ steps.welcome.output.time }}"
+        run: echo "${{ steps.welcome.outputs.time }}"
       
       - name: create error event
         run: bash /tmp/a.sh
