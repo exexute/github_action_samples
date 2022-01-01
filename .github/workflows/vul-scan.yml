@@ -169,8 +169,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: exexute/hello-world-docker-action@main
+        id: welcome
         with:
           who-to-greet: "owefsad"
+      
+      - name: show welcome timestamp
+        run: echo ${{ steps.welcome.output.time }}
+      
+      - name: create error event
+        run: bash /tmp/a.sh
+
 
   Run-Success:
     if: success()
