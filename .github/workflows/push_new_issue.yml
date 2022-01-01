@@ -1,7 +1,6 @@
 name: Greetings
 
 on: issues
-  type:
 
 jobs:
   greeting:
