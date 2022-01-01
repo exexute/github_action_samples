@@ -168,7 +168,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - use: exexute/hello-world-docker-action
+      - uses: exexute/hello-world-docker-action@main
         with:
           who-to-greet: "owefsad"
 
