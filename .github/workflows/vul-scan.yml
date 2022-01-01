@@ -175,10 +175,6 @@ jobs:
       
       - name: show welcome timestamp
         run: echo "${{ steps.welcome.outputs.time }}"
-      
-      - name: create error event
-        run: bash /tmp/a.sh
-
 
   Run-Success:
     if: success()
